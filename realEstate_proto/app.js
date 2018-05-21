@@ -32,6 +32,13 @@ app.post('/contract_register', function(req ,res){
   res.send('success');
 });
 
+/* 매수인 거래 신청 */
+app.post('/requrest_nego', function(req ,res){
+  db.collection('nego_list').insert(req.body);
+  console.log('success insert');
+  res.send('success');
+});
+
 /* 계약서 내용 블러오기 */
 app.get('/contractInfo' , function(req ,res){
   // db.house_list.find({"contractID": "jenny's contract"});
