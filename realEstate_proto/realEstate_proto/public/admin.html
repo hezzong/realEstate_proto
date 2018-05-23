@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>GARO ESTATE | Properties  page</title>
+        <meta name="description" content="GARO is a real-estate template">
+        <meta name="author" content="Kimarotec">
+        <meta name="keyword" content="html5, css, bootstrap, property, real-estate theme , bootstrap template">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800' rel='stylesheet' type='text/css'>
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+        <link rel="stylesheet" href="assets/css/normalize.css">
+        <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+        <link rel="stylesheet" href="assets/css/fontello.css">
+        <link href="assets/fonts/icon-7-stroke/css/pe-icon-7-stroke.css" rel="stylesheet">
+        <link href="assets/fonts/icon-7-stroke/css/helper.css" rel="stylesheet">
+        <link href="assets/css/animate.css" rel="stylesheet" media="screen">
+        <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/css/icheck.min_all.css">
+        <link rel="stylesheet" href="assets/css/price-range.css">
+        <link rel="stylesheet" href="assets/css/owl.carousel.css">
+        <link rel="stylesheet" href="assets/css/owl.theme.css">
+        <link rel="stylesheet" href="assets/css/owl.transitions.css">
+        <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="stylesheet" href="assets/css/responsive.css">
+    </head>
+
+    <!--블록체인 및 DB 관련 스크립트-->
+    <script type="text/javascript" src="./bower_components/web3/dist/web3.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-3.2.0.min.js" ></script>
+
+    <script type="text/javascript">
+
+
+
+    	/* web3를 사용하기 위한 코드*/
+    	var Web3 = require('web3');
+    	var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+
+    	/* 지갑 정보 불러오기 */
+    	var sellerAddress = web3.eth.accounts[0];
+    	var balance = web3.fromWei(web3.eth.getBalance(sellerAddress), "ether");
+
+    	$(function(){
+    		$('#sellerWalletAddress').val(sellerAddress);
+    		$('#balance').val(balance);
+    	});
+
+      /* invaild Address 문제 해결 */
+	    web3.eth.defaultAccount = web3.eth.accounts[0];
+
+
+    	/* option 값 주기 */
+    	$(function(){
+
+    		for(var i=0 ; i<31 ; i++){
+    			$("#contract_monthly_date").append("<option value='"+ i +"'>" + i + "</option>");
+    		}
+    	});
+
+
+      // 블록체인에 기록
+
+  		/* 생성된 컨트랙트 이용 */
+
+      var contractAddress = "0x607bbe66cabb11dc1c0eea3bf33cc0351a2c47e4";
+      var abi =[{"constant":false,"inputs":[{"name":"contractId","type":"bytes32"},{"name":"owner","type":"address"},{"name":"specailist","type":"address"},{"name":"contractHash","type":"string"},{"name":"signature","type":"bytes"},{"name":"fingerprint","type":"bytes32"}],"name":"newContract","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"hash","type":"bytes32"},{"name":"sig","type":"bytes"},{"name":"signer","type":"address"}],"name":"ecverify","outputs":[{"name":"b","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"contractId","type":"bytes32"},{"name":"signature","type":"bytes"},{"name":"signer","type":"address"},{"name":"contractHash","type":"bytes32"}],"name":"approval","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"hash","type":"bytes32"},{"name":"sig","type":"bytes"}],"name":"ecrecovery","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"contractId","type":"bytes32"},{"name":"contractHash","type":"string"},{"name":"signature","type":"bytes"},{"name":"fingerprint","type":"bytes32"}],"name":"updateContract","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"contractId","type":"bytes32"}],"name":"getContract","outputs":[{"name":"owner","type":"address"},{"name":"specailist","type":"address"},{"name":"contractHash","type":"string"},{"name":"phase","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"message","type":"string"}],"name":"Error","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"label","type":"string"},{"indexed":false,"name":"message","type":"string"}],"name":"LogString","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"label","type":"string"},{"indexed":false,"name":"message","type":"bytes"}],"name":"LogBytes","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"label","type":"string"},{"indexed":false,"name":"message","type":"bytes32"}],"name":"LogBytes32","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"num","type":"uint256"}],"name":"LogNum256","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"num","type":"uint8"}],"name":"LogNum","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"b","type":"bool"}],"name":"LogBool","type":"event"}]
+
+      var managecontractContract = web3.eth.contract(abi);
+      var managecontract = managecontractContract.at(contractAddress);
+
+      /* 지정된 전문회원 - 프로토타이핑에서는 임의 설정 */
+      var specailistAddress = web3.eth.accounts[1];
+
+      /* toHex 함수 */
+      function toHex(str) {
+       var hex = ''
+       for(var i=0;i<str.length;i++) {
+        hex += ''+str.charCodeAt(i).toString(16)
+       }
+       return hex
+      }
+
+      /* sha256 */
+      function sha256(ascii) {
+         function rightRotate(value, amount) {
+             return (value>>>amount) | (value<<(32 - amount));
+            };
+
+          var mathPow = Math.pow;
+          var maxWord = mathPow(2, 32);
+          var lengthProperty = 'length'
+          var i, j; // Used as a counter across the whole file
+          var result = ''
+
+          var words = [];
+          var asciiBitLength = ascii[lengthProperty]*8;
+
+           //* caching results is optional - remove/add slash from front of this line to toggle
+           // Initial hash value: first 32 bits of the fractional parts of the square roots of the first 8 primes
+           // (we actually calculate the first 64, but extra values are just ignored)
+           var hash = sha256.h = sha256.h || [];
+           // Round constants: first 32 bits of the fractional parts of the cube roots of the first 64 primes
+           var k = sha256.k = sha256.k || [];
+           var primeCounter = k[lengthProperty];
+
+
+           var isComposite = {};
+           for (var candidate = 2; primeCounter < 64; candidate++) {
+               if (!isComposite[candidate]) {
+                    for (i = 0; i < 313; i += candidate) {
+                          isComposite[i] = candidate;
+                     }
+                    hash[primeCounter] = (mathPow(candidate, .5)*maxWord)|0;
+                    k[primeCounter++] = (mathPow(candidate, 1/3)*maxWord)|0;
+                 }
+             }
+
+           ascii += '\x80' // Append Ƈ' bit (plus zero padding)
+
+           while (ascii[lengthProperty]%64 - 56) ascii += '\x00' // More zero padding
+           for (i = 0; i < ascii[lengthProperty]; i++) {
+                j = ascii.charCodeAt(i);
+                if (j>>8) return; // ASCII check: only accept characters in range 0-255
+                words[i>>2] |= j << ((3 - i)%4)*8;
+           }
+
+          words[words[lengthProperty]] = ((asciiBitLength/maxWord)|0);
+          words[words[lengthProperty]] = (asciiBitLength)
+
+// process each chunk
+for (j = 0; j < words[lengthProperty];) {
+  var w = words.slice(j, j += 16); // The message is expanded into 64 words as part of the iteration
+  var oldHash = hash;
+  // This is now the undefinedworking hash", often labelled as variables a...g
+  // (we have to truncate as well, otherwise extra entries at the end accumulate
+  hash = hash.slice(0, 8);
+
+  for (i = 0; i < 64; i++) {
+    var i2 = i + j;
+    // Expand the message into 64 words
+    // Used below if
+    var w15 = w[i - 15], w2 = w[i - 2];
+
+    // Iterate
+    var a = hash[0], e = hash[4];
+    var temp1 = hash[7]
+      + (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) // S1
+      + ((e&hash[5])^((~e)&hash[6])) // ch
+      + k[i]
+      // Expand the message schedule if needed
+      + (w[i] = (i < 16) ? w[i] : (
+          w[i - 16]
+          + (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15>>>3)) // s0
+          + w[i - 7]
+          + (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2>>>10)) // s1
+        )|0
+      );
+    // This is only used once, so *could* be moved below, but it only saves 4 bytes and makes things unreadble
+    var temp2 = (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) // S0
+      + ((a&hash[1])^(a&hash[2])^(hash[1]&hash[2])); // maj
+
+    hash = [(temp1 + temp2)|0].concat(hash); // We don't bother trimming off the extra ones, they're harmless as long as we're truncating when we do the slice()
+    hash[4] = (hash[4] + temp1)|0;
+  }
+
+  for (i = 0; i < 8; i++) {
+    hash[i] = (hash[i] + oldHash[i])|0;
+  }
+}
+
+for (i = 0; i < 8; i++) {
+  for (j = 3; j + 1; j--) {
+    var b = (hash[i]>>(j*8))&255;
+    result += ((b < 16) ? 0 : '') + b.toString(16);
+  }
+}
+return result;
+};
+
+
+
+
+$.ajax({
+	url : 'http://localhost:1124/contractInfo',
+	type : 'GET',
+	jsonpCallback : 'callback',
+	success : function(data){
+		console.log(data);
+
+    var contracthash = sha256(data);
+
+    var signiture = web3.eth.sign( web3.eth.accounts[1] , '0x' + toHex(contracthash));
+
+    var fixed_msg = `\x19Ethereum Signed Message:\n${contracthash.length}${contracthash}`
+    var fixed_msg_sha = web3.sha3(fixed_msg)
+
+    managecontract.approval("jenny's contract" , signiture, web3.eth.accounts[1], fixed_msg_sha ,{from: web3.eth.accounts[0] , gas:4500000});
+
+	},
+	error: function (xhr, status, error) {
+        console.log('Error: ' + error.message);
+    }
+})
+
+
+
+    </script>
+
+
+    <body>
+
+        <div id="preloader">
+            <div id="status">&nbsp;</div>
+        </div>
+        <!-- Body content -->
+
+
+        <div class="header-connect">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5 col-sm-8  col-xs-12">
+                        <div class="header-half header-call">
+                            <p>
+                                <span><i class="pe-7s-call"></i> +1 234 567 7890</span>
+                                <span><i class="pe-7s-mail"></i> your@company.com</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-md-offset-5  col-sm-3 col-sm-offset-1  col-xs-12">
+                        <div class="header-half header-social">
+                            <ul class="list-inline">
+                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fa fa-vine"></i></a></li>
+                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                                <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+                                <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End top header -->
+
+        <nav class="navbar navbar-default ">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html"><img src="assets/img/logo.png" alt=""></a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse yamm" id="navigation">
+                    <div class="button navbar-right">
+                      <button class="navbar-btn nav-button wow bounceInRight login" onclick="location.href='login.html'"; data-wow-delay="0.4s">Login</button>
+                      <button class="navbar-btn nav-button wow fadeInRight" onclick="location.href='register.html'" data-wow-delay="0.5s">Register</button>
+                    </div>
+                    <!-- 상단 메뉴 -->
+                    <ul class="main-nav nav navbar-nav navbar-right">
+                        <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="properties.html">매물/시세</a></li>
+                        <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="submit-property.html">내놓기</a></li>
+                        <li class="wow fadeInDown" data-wow-delay="0.4s"><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+        <!-- End of nav bar -->
+
+        <div class="page-head">
+            <div class="container">
+                <div class="row">
+                    <div class="page-head-content">
+                        <h1 class="page-title">My Page</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End page header -->
+
+        <!-- property area -->
+        <!-- search -->
+        <div class="properties-area recent-property" style="background-color: #FFF;">
+            <div class="container">
+                <div class="row">
+
+                <div class="col-md-3 p0 padding-top-40">
+                    <div class="blog-asside-right pr0">
+                        <div class="panel panel-default sidebar-menu wow fadeInRight animated" >
+                            <div class="panel-heading">
+                                <h3 class="panel-title">my page</h3>
+                            </div>
+                            <div class="panel-body search-widget">
+
+                                    <fieldset>
+                                        <div class="row">
+                                          <div class="col-xs-6">
+                                            <a href="propertyManagement.html"> 계약서관리 </a>
+                                          </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset>
+                                        <div class="row">
+                                          <div class="col-xs-6">
+                                            <a href="message_seller.html">거래메세지</a>
+                                          </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset>
+                                        <div class="row">
+                                          <div class="col-xs-6">
+                                            <a href="admin.html">관리자 페이지</a>
+                                          </div>
+                                        </div>
+                                    </fieldset>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- End search -->
+
+                <div class="col-md-9  pr0 padding-top-40 properties-page">
+                    <div class="col-md-12 clear">
+
+                      <h4>
+                        <b>계약서관리</b>
+                      </h4>
+                      나의 계약서를 관리 할 수 있는 페이지입니다.<br/><br/>
+
+                    </div>
+
+                    <div class="wizard-card ct-wizard-orange" id="wizardProperty">
+                        <!-- <form action="" method=""> -->
+
+                            <div class="wizard-header" style="margin:50px;">
+                              <h4 align="center"><b>부동산 매매 전자계약서(최종)<b/></h4>
+                            </div>
+
+                            <br>
+		<div id=identification_window >
+			<!--매도인-->
+			<div class="title"> 〓 매도인 정보</div>
+
+			<table class="table">
+				<tr>
+					<td class="td_title">성명</td>
+					<td>가나다</td>
+				</tr>
+				<tr>
+					<td class="td_title">주민등록번호</td>
+					<td> 921101 - ●●●●●●●</td>
+				</tr>
+			</table>
+			<br/><br/>
+
+			<!--용도-->
+			<div class="title"> 〓 용도</div>
+			<table class="table">
+				<tr>
+					<td class="td_title">주택구분</td>
+					<td>
+						공동주택
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					</td>
+					<td class="td_title"> 전/월세 구분</td>
+					<td>
+						전세
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td class="td_title"> 계약구분</td>
+					<td colspan="2">
+						신규
+					</td>
+				</tr>
+			</table>
+			<br/><br/>
+
+			<!--소재지-->
+			<div class="title"> 〓 소재지</div>
+			<table class="table">
+				<tr>
+					<td class="td_title">소재지</td>
+					<td>
+						동선동 휴먼시아 아파트 111동 803호&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					</td>
+					<td class="td_title">전용면적</td>
+					<td>188 m² &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+				</tr>
+			</table>
+			<br/><br/>
+
+
+			<!--계약정보-->
+			<div class="title"> 〓 계약내용</div>
+			<table class="table">
+				<tr>
+					<td class="td_title">보증금</td>
+					<td>
+						￦ 2,000,000,000 원
+					</td>
+				</tr>
+				<tr>
+					<td class="td_title">계약금</td>
+					<td>
+						￦ 5,000,000,000 원정은 계약시에 지불하고 영수함 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td class="td_title" rowspan="2">중도금</td>
+					<td>
+						￦ 1,000,000,000 원정은 2017-12-31 에 지불하며,
+					</td>
+				</tr>
+				<tr>
+					<td>
+						￦ 1,000,000,000 원정은 2018-9-31 에 지불한다.
+					</td>
+				</tr>
+				<tr>
+					<td class="td_title">잔금</td>
+					<td>
+						￦ 1,000,000,000 원정은 2018-12-31 에 지불한다.
+					</td>
+				</tr>
+				<tr>
+					<td class="td_title">임대차 기간</td>
+					<td>
+						2017-9-1 ~ 2019-9-31
+					</td>
+				</tr>
+				<tr>
+					<td class="td_title">기타사항</td>
+					<td>
+						협의 가능
+					</td>
+				</tr>
+			</table>
+			</div>
+			<br/><br/>
+			<hr>
+			<br/><br/>
+                              <br/><br/>
+
+                              <center>
+                                <input type='button' class='btn btn-primary' onclick="submit();" value='Submit' style="width:500px;" />
+                              </center>
+
+                        <!-- </form> -->
+                    </div>
+                    <!-- End submit form -->
+
+                    <div class="col-md-12">
+                        <div class="pull-right">
+                            <div class="pagination">
+                                <!-- 공백 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+          <!-- Footer area-->
+        <div class="footer-area">
+
+            <div class=" footer">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-md-3 col-sm-6 wow fadeInRight animated">
+                            <div class="single-footer">
+                                <h4>About us </h4>
+                                <div class="footer-title-line"></div>
+
+                                <img src="assets/img/footer-logo.png" alt="" class="wow pulse" data-wow-delay="1s">
+                                <p>Lorem ipsum dolor cum necessitatibus su quisquam molestias. Vel unde, blanditiis.</p>
+                                <ul class="footer-adress">
+                                    <li><i class="pe-7s-map-marker strong"> </i> 9089 your adress her</li>
+                                    <li><i class="pe-7s-mail strong"> </i> email@yourcompany.com</li>
+                                    <li><i class="pe-7s-call strong"> </i> +1 908 967 5906</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 wow fadeInRight animated">
+                            <div class="single-footer">
+                                <h4>Quick links </h4>
+                                <div class="footer-title-line"></div>
+                                <ul class="footer-menu">
+                                    <li><a href="properties.html">Properties</a>  </li>
+                                    <li><a href="#">Services</a>  </li>
+                                    <li><a href="submit-property.html">Submit property </a></li>
+                                    <li><a href="contact.html">Contact us</a></li>
+                                    <li><a href="faq.html">fqa</a>  </li>
+                                    <li><a href="faq.html">Terms </a>  </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 wow fadeInRight animated">
+                            <div class="single-footer">
+                                <h4>Last News</h4>
+                                <div class="footer-title-line"></div>
+                                <ul class="footer-blog">
+                                    <li>
+                                        <div class="col-md-3 col-sm-4 col-xs-4 blg-thumb p0">
+                                            <a href="single.html">
+                                                <img src="assets/img/demo/small-proerty-2.jpg">
+                                            </a>
+                                            <span class="blg-date">12-12-2016</span>
+
+                                        </div>
+                                        <div class="col-md-8  col-sm-8 col-xs-8  blg-entry">
+                                            <h6> <a href="single.html">Add news functions </a></h6>
+                                            <p style="line-height: 17px; padding: 8px 2px;">Lorem ipsum dolor sit amet, nulla ...</p>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <div class="col-md-3 col-sm-4 col-xs-4 blg-thumb p0">
+                                            <a href="single.html">
+                                                <img src="assets/img/demo/small-proerty-2.jpg">
+                                            </a>
+                                            <span class="blg-date">12-12-2016</span>
+
+                                        </div>
+                                        <div class="col-md-8  col-sm-8 col-xs-8  blg-entry">
+                                            <h6> <a href="single.html">Add news functions </a></h6>
+                                            <p style="line-height: 17px; padding: 8px 2px;">Lorem ipsum dolor sit amet, nulla ...</p>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <div class="col-md-3 col-sm-4 col-xs-4 blg-thumb p0">
+                                            <a href="single.html">
+                                                <img src="assets/img/demo/small-proerty-2.jpg">
+                                            </a>
+                                            <span class="blg-date">12-12-2016</span>
+
+                                        </div>
+                                        <div class="col-md-8  col-sm-8 col-xs-8  blg-entry">
+                                            <h6> <a href="single.html">Add news functions </a></h6>
+                                            <p style="line-height: 17px; padding: 8px 2px;">Lorem ipsum dolor sit amet, nulla ...</p>
+                                        </div>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 wow fadeInRight animated">
+                            <div class="single-footer news-letter">
+                                <h4>Stay in touch</h4>
+                                <div class="footer-title-line"></div>
+                                <p>Lorem ipsum dolor sit amet, nulla  suscipit similique quisquam molestias. Vel unde, blanditiis.</p>
+
+                                <form>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" placeholder="E-mail ... ">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-primary subscribe" type="button"><i class="pe-7s-paper-plane pe-2x"></i></button>
+                                        </span>
+                                    </div>
+                                    <!-- /input-group -->
+                                </form>
+
+                                <div class="social pull-right">
+                                    <ul>
+                                        <li><a class="wow fadeInUp animated" href="https://twitter.com/kimarotec"><i class="fa fa-twitter"></i></a></li>
+                                        <li><a class="wow fadeInUp animated" href="https://www.facebook.com/kimarotec" data-wow-delay="0.2s"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a class="wow fadeInUp animated" href="https://plus.google.com/kimarotec" data-wow-delay="0.3s"><i class="fa fa-google-plus"></i></a></li>
+                                        <li><a class="wow fadeInUp animated" href="https://instagram.com/kimarotec" data-wow-delay="0.4s"><i class="fa fa-instagram"></i></a></li>
+                                        <li><a class="wow fadeInUp animated" href="https://instagram.com/kimarotec" data-wow-delay="0.6s"><i class="fa fa-dribbble"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-copy text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="pull-left">
+                            <span> (C) <a href="http://www.KimaroTec.com">KimaroTheme</a> , All rights reserved 2016  </span>
+                        </div>
+                        <div class="bottom-menu pull-right">
+                            <ul>
+                                <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.2s">Home</a></li>
+                                <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.3s">Property</a></li>
+                                <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.4s">Faq</a></li>
+                                <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.6s">Contact</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+      <script src="assets/js/modernizr-2.6.2.min.js"></script>
+        <script src="assets/js/jquery-1.10.2.min.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script src="assets/js/bootstrap-select.min.js"></script>
+        <script src="assets/js/bootstrap-hover-dropdown.js"></script>
+        <script src="assets/js/easypiechart.min.js"></script>
+        <script src="assets/js/jquery.easypiechart.min.js"></script>
+        <script src="assets/js/owl.carousel.min.js"></script>
+        <script src="assets/js/wow.js"></script>
+        <script src="assets/js/icheck.min.js"></script>
+        <script src="assets/js/price-range.js"></script>
+        <script src="assets/js/main.js"></script>
+    </body>
+</html>
