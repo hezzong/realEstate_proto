@@ -131,7 +131,7 @@
     		})
 
     		if(confirm('총 3개의 개인정보가 포함되어 있습니다. 계약서 등록을 진행하시겠습니까?')){
-    			if(confirm('/* 계약 등록이 완료되었습니다 */')){
+    			if(confirm('/* 입력하신 값에 문제가 없어 계약이 실행 가능합니다. 실행하시겠습니까? */')){
     				location.href='index.html';
     			}
     		}
@@ -454,8 +454,7 @@
         var price = parseInt($('#contract_deposit').val())+ parseInt($('#contract_balance').val());
 
    			propertyContract.newContract("201805150005" , $('#property_address').val() , price , $('#contract_deposit').val(), $('#contract_balance').val(),
-                                    seller, signiture, contracthash ,fixed_msg_sha , {from: web3.eth.accounts[0] , gas:4500000});
-
+                                    seller, signiture, contracthash ,fixed_msg_sha , {from: web3.eth.accounts[0] , gas:4500000});                                                            
       }
       /* End Sumit() Function*/
 
